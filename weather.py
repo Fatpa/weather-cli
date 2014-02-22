@@ -458,10 +458,9 @@ location = {
 
 def get_location(city):
     try:
-        city_code =  location[city]
-    except Exception:
-        print u'查无该城市的编号'
-        return None
+        city_code = location[city]
+    except Exception: 
+        return False
     return city_code
 
 def get_weather_detail(site):
@@ -471,28 +470,29 @@ def get_weather_detail(site):
         re = re.decode('UTF-8')
         we = json.loads(re)['weatherinfo']
 
-        print u'城市: ' + we['city']
-        print u'日期: ' + we['date_y']
-        print we['week']
-        print u'未来6天天气: '
-        print '\t' + we['temp1'] + '\t' + we['weather1'] + '\t' + we['wind1']
-        print '\t' + we['temp2'] + '\t' + we['weather2'] + '\t' + we['wind2']
-        print '\t' + we['temp3'] + '\t' + we['weather3'] + '\t' + we['wind3']
-        print '\t' + we['temp4'] + '\t' + we['weather4'] + '\t' + we['wind4']
-        print '\t' + we['temp5'] + '\t' + we['weather5'] + '\t' + we['wind5']
-        print '\t' + we['temp6'] + '\t' + we['weather6'] + '\t' + we['wind6']
-        print u'穿衣指数: '+ we['index_d'] 
-        print u'紫外线: ' + we['index_uv']
+        data = u'城市: ' + we['city'] + '\n'
+        data += u'日期: ' + we['date_y'] + '\n'
+        data += we['week'] + '\n'
+        data += u'未来6天天气: ' + '\n'
+        data += '\t' + we['temp1'] + '\t' + we['weather1'] + '\t' + we['wind1'] + '\n'
+        data += '\t' + we['temp2'] + '\t' + we['weather2'] + '\t' + we['wind2'] + '\n'
+        data += '\t' + we['temp3'] + '\t' + we['weather3'] + '\t' + we['wind3'] + '\n'
+        data += '\t' + we['temp4'] + '\t' + we['weather4'] + '\t' + we['wind4'] + '\n'
+        data += '\t' + we['temp5'] + '\t' + we['weather5'] + '\t' + we['wind5'] + '\n'
+        data += '\t' + we['temp6'] + '\t' + we['weather6'] + '\t' + we['wind6'] + '\n'
+        data += u'穿衣指数: '+ we['index_d'] + '\n'
+        data += u'紫外线: ' + we['index_uv'] + '\n'
     except Exception:
-        print u'暂时查无该城市的天气预报'
+        data = u'暂时查无该城市的天气预报' + '\n'
+    return data
 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         print u'请输入城市名称: '
         city = raw_input().strip()
     else:
-        city = sys.argv[1].strip()
-        
+        city = sys.argv[1].strip()  
     city_code = get_location(city)
-    if city_code is not None:
-        get_weather_detail(city_code)
+    if not city_code: print u'查无该城市的编码'
+    else:
+        print get_weather_detail(city_code)
